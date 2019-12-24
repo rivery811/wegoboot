@@ -1,6 +1,6 @@
 <template>
 	<div class="login-form">
-    <form action="/examples/actions/confirmation.php" method="post">
+    <form >
         <h2 class="text-center">Log in</h2>       
         <div class="form-group">
             <input type="text" v-model ="userid" class="form-control" placeholder="Username" required="required">
@@ -9,7 +9,7 @@
             <input type="password" v-model ="passwd" class="form-control" placeholder="Password" required="required">
         </div>
         <div class="form-group">
-            <button @click="login" type="submit" class="btn btn-primary btn-block">Log in</button>
+            <button @click.prevent="login" type="submit" class="btn btn-primary btn-block">Log in</button>
         </div>
         <div class="clearfix">
             <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
@@ -21,13 +21,17 @@
 </template>
 <script>
 import axios from "axios"
+import {store} from "../../store"
+
 export default {
+
 	data(){
 		return{
 			context:'http://localhost:8080/',
 			result:'',
 			userid :null,
-			passwd :null
+			passwd :null,
+			person:{}
 
 		}
 	},
@@ -46,9 +50,21 @@ export default {
 			}
 			axios
 			.post(url,data,headers)
-			.then(res=>{
-				this.result = res.data
-				alert(`로그인성공 ${this.result.userid}`)
+			.then(respose=>{
+				if(respose.data.result === "success"){
+					store.state.person =respose.data.person
+					store.state.authCheck= true
+
+					alert(`로그인성공 ${respose.data.person.name}`)
+					alert(`로그인성공1 ${store.state.person.name}`)
+					this.$router.push({path:'/mypage'})
+					
+				}else{
+					alert(`T.T`)
+					this.$router.push({path:'/login'})
+				} 
+				
+				
 			})
 			.catch(()=>{
 				alert('dpftldhtm tlfvo')

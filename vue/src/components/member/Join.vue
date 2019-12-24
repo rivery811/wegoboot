@@ -1,37 +1,85 @@
  <template>
  <div class ="join">
-<div class="alert alert-danger" v-if="error && !success">
-        <p>There was an error, unable to complete registration.</p>
-    </div>
-    <div class="alert alert-success" v-if="success">
-        <p>Registration completed. You can now sign in.</p>
-    </div>
-    <form autocomplete="off" v-on:submit="register" v-if="!success">
-        <div class="form-group" v-bind:class="{ 'has-error': error && response.username }">
+    <form >
+       <div class="form-group" >
+            <label for="name">id</label>
+            <input type="text" id="id" class="form-control" v-model="id" required>
+          
+        </div>
+        <div >
+            <label for="email">uID</label>
+            <input type="email" id="uid" class="form-control"  v-model="userid" required>
+          
+        </div>
+        <div class="form-group" >
             <label for="name">Name</label>
             <input type="text" id="name" class="form-control" v-model="name" required>
-            <span class="help-block" v-if="error && response.name">{{ response.name }}</span>
+          
         </div>
-        <div class="form-group" v-bind:class="{ 'has-error': error && response.email }">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" class="form-control" placeholder="gavin.belson@hooli.com" v-model="email" required>
-            <span class="help-block" v-if="error && response.email">{{ response.email }}</span>
-        </div>
-        <div class="form-group" v-bind:class="{ 'has-error': error && response.password }">
+
+        <div >
             <label for="password">Password</label>
-            <input type="password" id="password" class="form-control" v-model="password" required>
-            <span class="help-block" v-if="error && response.password">{{ response.password }}</span>
+            <input type="password" id="password" class="form-control" v-model="passwd" required>
+          
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <div>
+            <label for="password">생일</label>
+            <input type="text" id="birth" class="form-control" v-model="birthday" required>
+            
+        </div>
+        <button @click.prevent="register" type="submit" class="btn btn-default">Submit</button>
     </form>
   </div>
 </template>
 
 <script>
+import axios from "axios"
+
 export default {
   data(){
+    return{
+      context:'http://localhost:8080/',
+        id:'',
+        userid:'',
+        passwd: '',
+        name: '',
+        birthday :''}
+        
+    
 
     
+  },
+  methods:{
+    register(){
+      alert(this.birthday)
+      alert(this.name)
+      let url=`${this.context}/join`
+			let data={
+        userid:this.userid,
+        passwd: this.passwd,
+        name: this.name,
+        birthday :this.birthday}
+			let headers= {
+				'authorization': 'JWT fefege..',
+				'Accept' : 'application/json',
+				'Content-Type': 'application/json'
+      }
+      axios
+			.post(url,data,headers)
+			.then(respose=>{ 
+          alert(respose.data.result)
+          if(respose.data.result==="success"){
+              this.$router.push('login')
+          }else{
+            this.$router.push('join')
+          }
+
+			})
+			.catch(()=>{
+				alert('dpftldhtm tlfvo')
+			}) 
+
+    }
   }
 
 }

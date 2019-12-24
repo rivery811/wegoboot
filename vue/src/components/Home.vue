@@ -1,10 +1,10 @@
 <template>
-	<div id >	
+	<div >	
 		<layout>			
 			<template #header="header">
 				<h1>{{header.title}}</h1>
-				<router-link to="/login">로그인</router-link><br>
-				<router-link to="/join">회원가입</router-link>		
+				<component :is="!loginCheck ?'pre-auth':'post-auth'"></component>
+					
 			</template>
 			<template #sidebar="sidebar">
 				<ul class="menu">
@@ -24,10 +24,18 @@
 	</div>
 </template>
 <script>
+import {store} from "../store"
 import Layout from '@/components/cmm/Layout.vue'
+import PreAuth from '@/components/cmm/PreAuth.vue'
+import PostAuth from '@/components/cmm/PostAuth.vue'
+
 export default{
-	components :{Layout},
+	components :{Layout,PreAuth,PostAuth
+	
+	},
 	data(){
+		//let name = store.state.person.name
+		//let name = data.name	
 		return{
 			sidebars:[
 				{menu:"글쓰기",link:"/write"},
@@ -36,6 +44,12 @@ export default{
 				{menu:"글삭제",link:"/remove"},
 				{menu:"검색",link:"/search"},
 			]
+		
+		}
+	},
+	computed:{
+		loginCheck: function(){
+			return store.state.authCheck
 		}
 	}
 }

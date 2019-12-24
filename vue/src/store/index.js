@@ -6,7 +6,16 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-	id : null,
-	offerId:''
+/* 	loginedId:'',
+	loginedPwd:'',
+	id:'',
+	name:'',
+	birthday:'',
+	gender:'',
+	hak:'',
+	ban:'',
+	score:'' */
+	person:{},
+	authCheck:false
   }
 })
