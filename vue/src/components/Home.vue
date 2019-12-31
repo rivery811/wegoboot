@@ -7,14 +7,16 @@
 					
 			</template>
 			<template #sidebar="sidebar">
-				<ul class="menu">
+						<component :is="sidebarkind" >Large</component>			
+
+				<!-- <ul class="menu">
 					<li v-for="i of sidebars" :key="i.menu">
 						<router-link :to="i.link">{{i.menu}}</router-link>					
 					</li>
-				</ul>
+				</ul> -->
 			</template>
 			<template #content="content">
-				<h1>{{content.msg}}</h1>
+				
 				<router-view/>    
 			</template>
 			<template #footer="footer">
@@ -28,14 +30,17 @@ import {store} from "../store"
 import Layout from '@/components/cmm/Layout.vue'
 import PreAuth from '@/components/cmm/PreAuth.vue'
 import PostAuth from '@/components/cmm/PostAuth.vue'
+import StudentSidebars from '@/components/cmm/StudentSidebars.vue'
+import TeacherSidebars from '@/components/cmm/TeacherSidebars.vue'
+import ManagerSidebars from '@/components/cmm/ManagerSidebars.vue'
+
 
 export default{
-	components :{Layout,PreAuth,PostAuth
+	components :{Layout,PreAuth,PostAuth,StudentSidebars,TeacherSidebars,ManagerSidebars
 	
 	},
 	data(){
-		//let name = store.state.person.name
-		//let name = data.name	
+
 		return{
 			sidebars:[
 				{menu:"글쓰기",link:"/write"},
@@ -43,13 +48,19 @@ export default{
 				{menu:"글수정",link:"/update"},
 				{menu:"글삭제",link:"/remove"},
 				{menu:"검색",link:"/search"},
-			]
+			],
+			//sidebarkind: store.state.sidebar
+			
+			
 		
 		}
 	},
-	computed:{
-		loginCheck: function(){
+	computed:{	
+		loginCheck: function(){			
 			return store.state.authCheck
+		},
+		sidebarkind:function(){
+			return store.state.sidebar
 		}
 	}
 }

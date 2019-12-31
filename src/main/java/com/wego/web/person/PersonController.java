@@ -2,9 +2,16 @@ package com.wego.web.person;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wego.web.util.Printer;
@@ -26,6 +34,15 @@ public class PersonController {
 	private Printer printer;
 	@Autowired
 	private Person person;
+	@Autowired
+	ModelMapper modelMapper;
+	@Autowired 
+	PersonService personService;
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
+	
 	@RequestMapping("/")
 	public String index() {
 		Iterable<Person> all = personRepository.findAll();
@@ -75,7 +92,7 @@ public class PersonController {
 	}
 	@DeleteMapping("/withdrawal/{userid}")
 	public void withdrawal(@PathVariable String userid ) {
-		
+		System.out.println(userid);
 		personRepository
 		.delete(personRepository.findByUserid(userid));
 	}
@@ -85,6 +102,55 @@ public class PersonController {
 		personRepository.save(param);
 		
 	}
+	@GetMapping("/students")
+	public Stream<Person> list(){
+		printer.accept("리스트");
+		Iterable<Person> entites = personRepository.findAll();	
+		//Iterable<Person> entites=personRepository.findByRole("student");
+		List<Person> list = new ArrayList<Person>();
+		for(Person p:entites) {
+			Person dto = modelMapper.map(p,Person.class);
+			list.add(dto);
+		}
+		return list.stream().filter(role-> role.getRole().equals("student"));
+	}
+	@GetMapping("/students/{searchword}")
+	public Object findSome(@PathVariable String searchword, @RequestParam String option){
+		
+		switch (searchword) {
+		case "namesOfStudents":return personService.namesOfStudents();	
+		case "streamToArray": return personService.streamToArray();
+		case "streamToMap":return personService.streamToMap();
+		case "theNumberOfStudents":return personService.theNumberOfStudents();
+		case "totalScore":return personService.totalScore();
+		case "topStudent":return personService.topStudent();
+		case "getStat":return personService.getStat();
+		case "nameList":return personService.nameList();
+		
+		  case "partioningBy":
+			  String word = (option =="남")?"true":"false";
+			  return personRepository.findByRole("student").stream()
+		               .collect(
+			                      Collectors
+			                          .partitioningBy(Person::isMale))
+			               .get(word);
+		  case "partioningCountPerGender":return personService.partioningCountPerGender(true); 
+		  case "partioningTopPerGender":return personService.partioningTopPerGender(true);
+		  case "partioningRejectPerGender":return personService.partioningRejectPerGender(true);
+		 
+		case "groupingByBan":return personService.findByBan();
+		case "groupingByGrade":return personService.findByHak();
+		case "groupingByCountByLevel":return personService.personCountByLevel();
+		case "groupingByHakAndBan":return personService.multiGrouping();
+		case "groupingTopByHakAndBan":return personService.multiGroupingMax();
+		case "groupingByStat":return personService.multiGroupingGrade();
+			
 
+		default:
+			break;
+		}
+		
+		return null;
+	}
 
 }

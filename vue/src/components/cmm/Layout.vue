@@ -1,7 +1,7 @@
 <template>
 <div id ="wrapper"> 
 	<header>	
-		<slot name="header" :title ="header"></slot>	
+		<slot name="header" :title ="headermsg"></slot>	
 	</header>
 	<aside id ="sidebar">
 		<slot name="sidebar"></slot>
@@ -16,16 +16,22 @@
 </div>
 </template>
 <script>
-
+import {store} from "../../store"
 export default{
 
 	data(){
 		return{
-			header :"헤더",
 			content:"내용",
 			footer:"footer"
 					
 	}
+},
+computed:{
+     headermsg(){         
+          return store.state.headermsg
+
+
+     }
 }
 }
 </script>

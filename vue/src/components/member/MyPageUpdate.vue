@@ -15,7 +15,6 @@
                 <input type="text" name="pwd" size="20" placeholder="변경할 반 입력" v-model="person.ban"  style="float: none;width: 70%;">
                 <input type="text" name="pwd" size="20" placeholder="변경할 성적 입력" v-model="person.score"   style="float: none;width: 70%;">
                 <br/><br/>
-                <button style="height: 20%; width: 70%; float: none;" @click.prevent="modify">수정</button>
            </fieldset>
         </div>
       </div>

@@ -28,6 +28,7 @@ export default{
         store.state.person.hak =''
         store.state.person.ban =''
         store.state.person.score ='' 
+        store.state.authCheck=false
         this.$router.push('login')
         },
       withdrawal(){
@@ -38,6 +39,7 @@ export default{
         .then(()=>{
           alert('axios s')
           store.state.authCheck=false
+          store.state.headermsg='공통화면'
           this.$router.push('login')
         })
         .catch(()=>{

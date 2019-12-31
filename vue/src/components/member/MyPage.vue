@@ -6,6 +6,7 @@
            <fieldset style=" margin-top: 1%; height: 31.5%;border: 2px solid black;">
              <legend><h3>비밀번호 </h3></legend>
                 <h4>{{person.passwd}}</h4>
+              <button @click.prevent="goupdate">수정</button>	
                 
            </fieldset>
            <fieldset style="margin-top: 1%; height: 60%;border: 2px solid black;">
@@ -14,7 +15,7 @@
                 <h4>{{person.ban}}반</h4>
                 <h4>{{person.score}}</h4>
                 <br/><br/>
-                <button @click.prevent="goupdate">수정</button>	
+                
            </fieldset>
         </div>
       </div>

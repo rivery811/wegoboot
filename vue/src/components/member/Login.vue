@@ -20,58 +20,23 @@
 </div>
 </template>
 <script>
-import axios from "axios"
-import {store} from "../../store"
+import { createNamespacedHelpers } from 'vuex'
 
-export default {
+const { mapState } = createNamespacedHelpers('@/store/modules/admin')
 
-	data(){
-		return{
-			context:'http://localhost:8080/',
-			result:'',
-			userid :null,
-			passwd :null,
-			person:{}
-
-		}
-	},
-	methods :{
-		login(){
-			alert(this.userid + this.passwd)
-			let url=`${this.context}/login`
-			let data={
-				userid: this.userid,
-				passwd: this.passwd
-			}
-			let headers= {
-				'authorization': 'JWT fefege..',
-				'Accept' : 'application/json',
-				'Content-Type': 'application/json'
-			}
-			axios
-			.post(url,data,headers)
-			.then(respose=>{
-				if(respose.data.result === "success"){
-					store.state.person =respose.data.person
-					store.state.authCheck= true
-
-					alert(`로그인성공 ${respose.data.person.name}`)
-					alert(`로그인성공1 ${store.state.person.name}`)
-					this.$router.push({path:'/mypage'})
-					
-				}else{
-					alert(`T.T`)
-					this.$router.push({path:'/login'})
-				} 
-				
-				
-			})
-			.catch(()=>{
-				alert('dpftldhtm tlfvo')
-			}) 
-		}
+export default{
+	computed: {
+    // `some/nested/module`에서 찾음
+    ...mapState({
+      userid: state => state.login,
+      passwd: state => state.passwd
+    })
+  },
+  methods: {
+    login(){
+		this.$store.dispatch(this.$store.state.userid,this.$store.state.passwd)
 	}
-
+  }
 }
 </script>
 <style scoped>

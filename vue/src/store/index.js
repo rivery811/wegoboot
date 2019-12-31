@@ -1,21 +1,29 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-//import axios from 'axios'
 
+import admin from '@/store/modules/admin'
+import common from '@/store/modules/common'
+import students from '@/store/modules/students'
+import article from '@/store/modules/article'
 Vue.use(Vuex)
 
-export const store = new Vuex.Store({
+/* export const store = new Vuex.Store({
   state: {
-/* 	loginedId:'',
-	loginedPwd:'',
-	id:'',
-	name:'',
-	birthday:'',
-	gender:'',
-	hak:'',
-	ban:'',
-	score:'' */
 	person:{},
-	authCheck:false
+	authCheck:false,
+	sidebar:'',
+	headermsg :'공통화면'
   }
+}) 뷰엑스전 */
+
+
+export const store = new Vuex.Store({
+	modules:{
+		students,
+		article,
+		admin,
+		common
+	},
+	strict:true
+
 })
